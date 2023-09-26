@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API串接測試</title>
+  </head>
+  <body>
+    <h1>API串接測試</h1>
+    <div>
+      <label for="username">使用者名稱:</label>
+      <input type="text" id="username" placeholder="輸入使用者名稱" />
+    </div>
+    <div>
+      <label for="message">訊息:</label>
+      <input type="text" id="message" placeholder="輸入訊息" />
+    </div>
+    <button id="sendButton">發送</button>
+    <div id="response"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const sendButton = document.getElementById("sendButton");
+        const usernameInput = document.getElementById("username");
+        const messageInput = document.getElementById("message");
+        const responseDiv = document.getElementById("response");
+
+        sendButton.addEventListener("click", function () {
+          const username = usernameInput.value;
+          const message = messageInput.value;
+
+          // 構建要發送的JSON數據
+          const data = {
+            username: username,
+            message: message,
+          };
+
+          // 使用Fetch API發送POST請求
+          fetch("http://localhost:8000/api/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.text())
+            .then((data) => {
+              // 將回應顯示在網頁上
+              responseDiv.textContent = data;
+            })
+            .catch((error) => {
+              console.error("發送請求時出現錯誤:", error);
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
